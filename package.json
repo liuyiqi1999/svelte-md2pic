@@ -1,0 +1,22 @@
+{
+  "name": "svelte-template",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@iconify-json/carbon": "^1.1.4",
+    "@iconify-json/mdi": "^1.1.12",
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
+    "svelte": "^3.44.0",
+    "unplugin-icons": "^0.14.3",
+    "vite": "^2.9.9"
+  },
+  "dependencies": {
+    "svelte-themer": "^0.5.5"
+  }
+}
