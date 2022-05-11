@@ -2,16 +2,26 @@
   import Header from "./lib/header/Header.svelte";
   import { ThemeWrapper } from 'svelte-themer'
   import { themes } from "./themes";
+  import { onMount } from 'svelte';
+  import EasyMDE from 'easymde';
+  onMount(() => {
+    const easyMDE = new EasyMDE();
+  })
 </script>
+
+<svelte:head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+</svelte:head>
 
 <ThemeWrapper themes="{themes}">
 <Header />
 <main>
-  
-  <h1>Hello world!</h1>
-
-  <p>Start your svelte project! </p>
-
+  <div class="wrapper">
+    <textarea></textarea>
+  </div>
+  <div class="wrapper">
+    <span border-b-1 text-lg mono hover-cursor-pointer>md2pic<div ml-1 class="i-carbon-arrow-right" /></span>
+  </div>
 </main>
 <footer>Powered by <a href="https://svelte.dev">Svelte</a></footer>
 </ThemeWrapper>
@@ -28,7 +38,6 @@
   }
 
   main {
-    text-align: center;
     padding: 1em;
     margin: 0 auto;
   }
@@ -63,6 +72,11 @@
     width: 100%;
 		text-align: center;
 	}
+
+  .wrapper {
+    max-width: 50em;
+    margin: 3em auto;
+  }
 
 	@media (min-width: 480px) {
 		footer {

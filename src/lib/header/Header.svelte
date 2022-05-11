@@ -1,6 +1,6 @@
 <script>
-	let title = 'title';
-	let link = 'https://github.com/liuyiqi1999';
+	let title = 'md2pic';
+	let link = 'https://github.com/liuyiqi1999/svelte-md2pic';
 	import ThemeToggler from '../ThemeToggler.svelte';
 	import logo from './svelte-logo.svg';
 	import CarbonLogoGithub from '~icons/carbon/logo-github'
