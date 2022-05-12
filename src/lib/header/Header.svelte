@@ -19,7 +19,7 @@
 	</div>
 	<div class="corner">
 		<a class="link-icon" href="{link}"><CarbonLogoGithub /></a>
-		<span class="link-icon"><ThemeToggler /></span>
+		<!-- <span class="link-icon"><ThemeToggler /></span> -->
 	</div>
 </header>
 
