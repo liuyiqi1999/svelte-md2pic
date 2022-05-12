@@ -11,6 +11,11 @@
   let easyMDE;
   onMount(() => {
     easyMDE = new EasyMDE({
+      autofocus: true,
+      autosave: {
+        enabled: true,
+        uniqueId: 'md2pic'
+      },
       maxHeight: '20em',
       spellChecker: false,
       toolbar: ["bold", "italic", "heading", "horizontal-rule", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "table", "|", "clean-block", "fullscreen", "preview", "guide"]
@@ -21,25 +26,34 @@
   })
 
   let isEditing = true;
+  let isHacking = false;
   let hasPictured = false;
   let value = '';
 
   async function toPic() {
     if (isEditing) {
       value = easyMDE.value();
-      isEditing = !isEditing;
-      await tick();
-      takePicture();
     }
+    isEditing = false;
+    isHacking = false;
+    await tick();
+    takePicture();
   }
 
+  async function toHack() {
+    value = easyMDE.value();
+    isEditing = false;
+    isHacking = true;
+  }
+
+  let cssString = '';
+
   async function toEdit() {
-    if (!isEditing) {
-      isEditing = !isEditing;
-      hasPictured = false;
-      await tick();
-      easyMDE = new EasyMDE({initialValue: value});
-    }
+    isEditing = true;
+    isHacking = false;
+    hasPictured = false;
+    await tick();
+    easyMDE = new EasyMDE({initialValue: value});
   }
 
   const takePicture = () => {
@@ -68,16 +82,31 @@
   <div class="wrapper actions-wrapper">
     {#if isEditing}
     <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toPic}">md2pic<span class="i-carbon-arrow-down" /></div>
+    <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toHack}">css<span class="i-carbon-area-custom" /></div>
     {:else}
     <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toEdit}"><span class="i-carbon-arrow-up" />edit</div>
+    {#if isHacking}
+    <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toPic}">md2pic<span class="i-carbon-arrow-down" /></div>
+    {/if}
     {/if}
   </div>
   {#if !isEditing}
-  <div class="wrapper actions-wrapper">
+  <div class="wrapper">
     {#if !hasPictured}
-    <div text-xl less-mono flex items-center><span mr-3 class="i-carbon-camera" /><span>picturing...</span></div>
+    {#if isHacking}
+    <div transition:slide="{{duration: 200}}">
+      <div w-full flex items-center justify-start gap-6 b-1 rounded-md p-3>
+        <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your css string. </span><span text-slate-400 ml-3>// color: #ff3e00; font-size: 100px; </span></div>
+      </div>
+      <textarea bind:value="{cssString}" w-full rounded-md p-3 mt-3></textarea>
+    </div>
     {:else}
-    <div w-full flex items-center justify-start gap-6 b-1 rounded-md p-3>
+    <div w-full flex items-center justify-start gap-6 b-1 rounded-md p-3  transition:slide="{{duration: 200}}">
+      <div text-base less-mono flex items-center><span mr-3 class="i-carbon-camera" /><span>picturing...</span></div>
+    </div>
+    {/if}
+    {:else}
+    <div w-full flex items-center justify-start gap-6 b-1 rounded-md p-3  transition:slide="{{duration: 200}}">
       <div text-base less-mono flex items-center><span mr-3 class="i-carbon-machine-learning" /><span>done</span></div>
       <div text-base less-mono>Long press to save the image. </div>
     </div>
@@ -85,9 +114,9 @@
   </div>
   <div class="wrapper result-wrapper">
     {#if !hasPictured}
-    <div id="html-wrapper">{@html marked(value)}</div>
+    <div id="html-wrapper" style="{cssString}">{@html marked(value)}</div>
     {:else}
-    <div shadow-md rounded-md p-0 class="pic-wrapper"><img id="pic-slot" /></div>
+    <div shadow-md rounded-md p-0 class="pic-wrapper" transition:slide="{{duration: 200}}"><img id="pic-slot" /></div>
     {/if}
   </div>
   {/if}
