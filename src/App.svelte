@@ -29,10 +29,13 @@
   let isHacking = false;
   let hasPictured = false;
   let value = '';
+  let cssString = localStorage.getItem('css') ?? '';
 
   async function toPic() {
     if (isEditing) {
       value = easyMDE.value();
+    } else if (isHacking) {
+      localStorage.setItem('css', cssString);
     }
     isEditing = false;
     isHacking = false;
@@ -46,7 +49,6 @@
     isHacking = true;
   }
 
-  let cssString = '';
 
   async function toEdit() {
     isEditing = true;
