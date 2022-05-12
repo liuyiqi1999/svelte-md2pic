@@ -72,7 +72,7 @@
   }
 
   const takePicture = () => {
-    html2canvas(document.querySelector("#html-wrapper")).then(async (canvas) => {
+    html2canvas(document.querySelector("#html-wrapper"), {scale: 2}).then(async (canvas) => {
       hasPictured = true;
       const dataUrl = canvas.toDataURL();
       await tick();
