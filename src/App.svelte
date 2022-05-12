@@ -11,7 +11,7 @@
   let easyMDE;
   onMount(() => {
     easyMDE = new EasyMDE({
-      maxHeight: '30em',
+      maxHeight: '20em',
       spellChecker: false,
       toolbar: ["bold", "italic", "heading", "horizontal-rule", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "table", "|", "clean-block", "fullscreen", "preview", "guide"]
     });
@@ -70,19 +70,22 @@
     <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toPic}">md2pic<span class="i-carbon-arrow-down" /></div>
     {:else}
     <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toEdit}"><span class="i-carbon-arrow-up" />edit</div>
-    {#if !hasPictured}
-    <div text-xl mono flex items-center>picturing...<span class="i-carbon-camera" /></div>
-    {:else}
-    <div text-xl mono flex items-center>done!<span class="i-carbon-machine-learning" /></div>
-    {/if}
     {/if}
   </div>
   {#if !isEditing}
+  <div class="wrapper actions-wrapper">
+    {#if !hasPictured}
+    <div text-xl less-mono flex items-center>> picturing...<span class="i-carbon-camera" /></div>
+    {:else}
+    <div text-xl less-mono flex items-center>> done<span class="i-carbon-machine-learning" /></div>
+    <div text-base less-mono flex items-center>Long press to save the image. </div>
+    {/if}
+  </div>
   <div class="wrapper result-wrapper">
     {#if !hasPictured}
     <div id="html-wrapper">{@html marked(value)}</div>
     {:else}
-    <div class="pic-wrapper"><img id="pic-slot" /></div>
+    <div shadow-lg p-0 class="pic-wrapper"><img id="pic-slot" /></div>
     {/if}
   </div>
   {/if}
@@ -93,6 +96,7 @@
 
 <style lang="scss">
   @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap");
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 
   :global(html) {
     background-color: var(--theme-colors-background, initial);
@@ -150,7 +154,6 @@
   }
 
   .actions-wrapper {
-    max-width: 10em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -168,7 +171,6 @@
   .pic-wrapper {
     max-width: 100%;
     max-height: 100%;
-    padding: 1em;
     #pic-slot {
       max-width: 100%;
       max-height: 100%;

@@ -17,11 +17,13 @@ export default defineConfig({
           extraProperties: {
             'display': 'inline-block',
             'vertical-align': 'middle',
+            'margin': '5px'
           },
         }),
       ],
       rules: [
-        ['mono', {'font-family': `'Major Mono Display', monospace;`}]
+        ['mono', {'font-family': `'Major Mono Display', monospace;`}],
+        ['less-mono', {'font-family': `'Space Mono', monospace;`}],
       ]
     }),
     svelte(),
