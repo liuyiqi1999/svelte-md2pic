@@ -11,6 +11,9 @@
   let easyMDE;
   onMount(() => {
     easyMDE = new EasyMDE({
+      renderingConfig:{
+        singleLineBreaks: false,
+      },
       spellChecker: false,
       autofocus: true,
       autosave: {
@@ -126,7 +129,7 @@
   </div>
   <div class="wrapper result-wrapper">
     {#if !hasPictured}
-    <div w-full max-w-full id="html-wrapper" style="{cssString}">{@html marked(value)}</div>
+    <div w-full max-w-full id="html-wrapper" style="{cssString}">{@html marked(value, {breaks: true})}</div>
     {:else}
     <div w-full shadow-md rounded-md p-0 class="pic-wrapper" transition:slide="{{duration: 200}}"><img max-w-full id="pic-slot" /></div>
     {/if}
