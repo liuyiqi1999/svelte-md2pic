@@ -75,17 +75,19 @@
   {#if !isEditing}
   <div class="wrapper actions-wrapper">
     {#if !hasPictured}
-    <div text-xl less-mono flex items-center>> picturing...<span class="i-carbon-camera" /></div>
+    <div text-xl less-mono flex items-center><span mr-3 class="i-carbon-camera" /><span>picturing...</span></div>
     {:else}
-    <div text-xl less-mono flex items-center>> done<span class="i-carbon-machine-learning" /></div>
-    <div text-base less-mono flex items-center>Long press to save the image. </div>
+    <div w-full flex items-center justify-start gap-6 b-1 rounded-md p-3>
+      <div text-base less-mono flex items-center><span mr-3 class="i-carbon-machine-learning" /><span>done</span></div>
+      <div text-base less-mono>Long press to save the image. </div>
+    </div>
     {/if}
   </div>
   <div class="wrapper result-wrapper">
     {#if !hasPictured}
     <div id="html-wrapper">{@html marked(value)}</div>
     {:else}
-    <div shadow-lg p-0 class="pic-wrapper"><img id="pic-slot" /></div>
+    <div shadow-md rounded-md p-0 class="pic-wrapper"><img id="pic-slot" /></div>
     {/if}
   </div>
   {/if}
