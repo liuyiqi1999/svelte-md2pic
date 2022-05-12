@@ -71,9 +71,9 @@
     {:else}
     <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toEdit}"><span class="i-carbon-arrow-up" />edit</div>
     {#if !hasPictured}
-    <div text-xl hover-cursor-pointer mono flex items-center>picturing...<span class="i-carbon-camera" /></div>
+    <div text-xl mono flex items-center>picturing...<span class="i-carbon-camera" /></div>
     {:else}
-    <div text-xl hover-cursor-pointer mono flex items-center>done!<span class="i-carbon-machine-learning" /></div>
+    <div text-xl mono flex items-center>done!<span class="i-carbon-machine-learning" /></div>
     {/if}
     {/if}
   </div>
@@ -146,11 +146,11 @@
   }
 
   .actions-wrapper {
-    max-width: 6em;
+    max-width: 10em;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1em
+    gap: 2em
   }
 
   #html-wrapper {
