@@ -11,15 +11,15 @@
   let easyMDE;
   onMount(() => {
     easyMDE = new EasyMDE({
+      spellChecker: false,
       autofocus: true,
       autosave: {
         enabled: true,
         uniqueId: 'md2pic'
       },
       maxHeight: '20em',
-      spellChecker: false,
       toolbar: ["bold", "italic", "heading", "horizontal-rule", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "table", "|", "clean-block", "fullscreen", "preview", "guide"]
-    });
+  });
     easyMDE.codemirror.on("change", () => {
         value = easyMDE.value();
     });
@@ -55,7 +55,17 @@
     isHacking = false;
     hasPictured = false;
     await tick();
-    easyMDE = new EasyMDE({initialValue: value});
+    easyMDE = new EasyMDE({
+      spellChecker: false,
+      autofocus: true,
+      autosave: {
+        enabled: true,
+        uniqueId: 'md2pic'
+      },
+      maxHeight: '20em',
+      toolbar: ["bold", "italic", "heading", "horizontal-rule", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "table", "|", "clean-block", "fullscreen", "preview", "guide"],
+      initialValue: value
+    });
   }
 
   const takePicture = () => {
@@ -116,9 +126,9 @@
   </div>
   <div class="wrapper result-wrapper">
     {#if !hasPictured}
-    <div w-full id="html-wrapper" style="{cssString}">{@html marked(value)}</div>
+    <div w-full max-w-full id="html-wrapper" style="{cssString}">{@html marked(value)}</div>
     {:else}
-    <div w-full shadow-md rounded-md p-0 class="pic-wrapper" transition:slide="{{duration: 200}}"><img w-full id="pic-slot" /></div>
+    <div w-full shadow-md rounded-md p-0 class="pic-wrapper" transition:slide="{{duration: 200}}"><img max-w-full id="pic-slot" /></div>
     {/if}
   </div>
   {/if}
