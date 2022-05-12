@@ -99,6 +99,10 @@
     color: var(--theme-colors-text, initial);
   }
 
+  :global(body) {
+    margin: 0;
+  }
+
   :root {
     font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
       Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -155,6 +159,7 @@
 
   #html-wrapper {
     padding: 2em;
+    font-size: 12px;
     font-weight: normal;
     font-family: "Noto Serif SC", serif;
     text-align: left;
