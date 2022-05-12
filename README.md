@@ -1,4 +1,4 @@
-# MD2PIC
+# md2pic
 
 A markdown text picturing app based on:
 - easymde
