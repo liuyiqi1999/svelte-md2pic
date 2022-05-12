@@ -13,7 +13,7 @@
     easyMDE = new EasyMDE({
       maxHeight: '30em',
       spellChecker: false,
-      toolbar: ["bold", "italic", "heading", "horizontal-rule", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "table", "|", "fullscreen", "preview", "guide"]
+      toolbar: ["bold", "italic", "heading", "horizontal-rule", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "table", "|", "clean-block", "fullscreen", "preview", "guide"]
     });
     easyMDE.codemirror.on("change", () => {
         value = easyMDE.value();
