@@ -98,15 +98,15 @@
       <div w-full flex items-center justify-start gap-6 b-1 rounded-md p-3>
         <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your css string. </span><span text-slate-400 ml-3>// color: #ff3e00; font-size: 100px; </span></div>
       </div>
-      <textarea bind:value="{cssString}" w-full rounded-md p-3 mt-3></textarea>
+      <textarea w-full bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
     </div>
     {:else}
-    <div w-full flex items-center justify-start gap-6 b-1 rounded-md p-3  transition:slide="{{duration: 200}}">
+    <div flex items-center justify-start gap-6 b-1 rounded-md p-3  transition:slide="{{duration: 200}}">
       <div text-base less-mono flex items-center><span mr-3 class="i-carbon-camera" /><span>picturing...</span></div>
     </div>
     {/if}
     {:else}
-    <div w-full flex items-center justify-start gap-6 b-1 rounded-md p-3  transition:slide="{{duration: 200}}">
+    <div flex items-center justify-start gap-6 b-1 rounded-md p-3  transition:slide="{{duration: 200}}">
       <div text-base less-mono flex items-center><span mr-3 class="i-carbon-machine-learning" /><span>done</span></div>
       <div text-base less-mono>Long press to save the image. </div>
     </div>
@@ -114,9 +114,9 @@
   </div>
   <div class="wrapper result-wrapper">
     {#if !hasPictured}
-    <div id="html-wrapper" style="{cssString}">{@html marked(value)}</div>
+    <div w-full id="html-wrapper" style="{cssString}">{@html marked(value)}</div>
     {:else}
-    <div shadow-md rounded-md p-0 class="pic-wrapper" transition:slide="{{duration: 200}}"><img id="pic-slot" /></div>
+    <div w-full shadow-md rounded-md p-0 class="pic-wrapper" transition:slide="{{duration: 200}}"><img w-full id="pic-slot" /></div>
     {/if}
   </div>
   {/if}
@@ -197,15 +197,6 @@
     font-weight: normal;
     font-family: "Noto Serif SC", serif;
     text-align: left;
-  }
-
-  .pic-wrapper {
-    max-width: 100%;
-    max-height: 100%;
-    #pic-slot {
-      max-width: 100%;
-      max-height: 100%;
-    }
   }
 
 	@media (min-width: 480px) {
