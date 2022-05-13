@@ -151,7 +151,7 @@
 
   :global(body) {
     margin-top: 0;
-    overflow: hidden;
+    overflow: scroll;
   }
 
   :root {
