@@ -4,7 +4,7 @@
   import { themes } from "./themes";
   import { onMount, tick } from 'svelte';
   import EasyMDE from 'easymde';
-  import { slide } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
   import { marked } from 'marked';
   import html2canvas from 'html2canvas';
 
@@ -90,7 +90,7 @@
 
 <main>
   {#if isEditing}
-  <div class="wrapper" transition:slide="{{duration: 200}}">
+  <div class="wrapper" transition:fly="{{duration: 300}}">
     <textarea class="textarea"></textarea>
   </div>
   {/if}
@@ -106,32 +106,32 @@
     {/if}
   </div>
   {#if !isEditing}
-  <div class="wrapper">
+  <div class="wrapper" transition:fly="{{duration: 300}}">
     {#if !hasPictured}
     {#if isHacking}
-    <div transition:slide="{{duration: 200}}">
+    <div>
       <div w-full flex items-center justify-start gap-6 b-1 rounded-md p-3>
         <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your css string. </span><span text-slate-400 ml-3>// color: #ff3e00; font-size: 100px; </span></div>
       </div>
       <textarea w-full bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
     </div>
     {:else}
-    <div flex items-center justify-start gap-6 b-1 rounded-md p-3  transition:slide="{{duration: 200}}">
+    <div flex items-center justify-start gap-6 b-1 rounded-md p-3>
       <div text-base less-mono flex items-center><span mr-3 class="i-carbon-camera" /><span>picturing...</span></div>
     </div>
     {/if}
     {:else}
-    <div flex items-center justify-start gap-6 b-1 rounded-md p-3  transition:slide="{{duration: 200}}">
+    <div flex items-center justify-start gap-6 b-1 rounded-md p-3>
       <div text-base less-mono flex items-center><span mr-3 class="i-carbon-machine-learning" /><span>done</span></div>
       <div text-base less-mono>Long press to save the image. </div>
     </div>
     {/if}
   </div>
-  <div class="wrapper result-wrapper">
+  <div class="wrapper result-wrapper" transition:fly="{{duration: 300}}">
     {#if !hasPictured}
     <div w-full max-w-full id="html-wrapper" style="{cssString}">{@html marked(value, {breaks: true})}</div>
     {:else}
-    <div w-full shadow-md rounded-md p-0 class="pic-wrapper" transition:slide="{{duration: 200}}"><img max-w-full id="pic-slot" /></div>
+    <div w-full shadow-md rounded-md p-0 class="pic-wrapper"><img max-w-full id="pic-slot" /></div>
     {/if}
   </div>
   {/if}
@@ -150,7 +150,8 @@
   }
 
   :global(body) {
-    margin: 0;
+    margin-top: 0;
+    overflow: hidden;
   }
 
   :root {

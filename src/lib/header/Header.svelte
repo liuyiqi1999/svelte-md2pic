@@ -3,10 +3,9 @@
 	let link = 'https://github.com/liuyiqi1999/svelte-md2pic';
 	import ThemeToggler from '../ThemeToggler.svelte';
 	import logo from './svelte-logo.svg';
-	import CarbonLogoGithub from '~icons/carbon/logo-github'
 </script>
 
-<header>
+<header max-w-full>
 	<div class="head-wrapper">
 		<div class="icon-wrapper">
 			<div class="icon">
@@ -18,7 +17,7 @@
 		<a class="title" href="/">{title}</a>
 	</div>
 	<div class="corner">
-		<a class="link-icon" href="{link}"><CarbonLogoGithub /></a>
+		<a class="link-icon" href="{link}"><i class="i-carbon-logo-github link-icon" /></a>
 		<!-- <span class="link-icon"><ThemeToggler /></span> -->
 	</div>
 </header>
