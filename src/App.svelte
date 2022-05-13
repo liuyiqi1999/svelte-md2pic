@@ -94,7 +94,7 @@
     },
     {
       name: 'phone',
-      value: 'width: 26em;'
+      value: 'width: 33em;'
     },
     {
       name: `your teacher's cLASsiC keynotes`,
