@@ -7,6 +7,9 @@
   import { fly } from 'svelte/transition';
   import { marked } from 'marked';
   import html2canvas from 'html2canvas';
+  import Tag from './lib/Tag.svelte';
+  import MonoButton from './lib/MonoButton.svelte';
+  import CommandLineBox from './lib/CommandLineBox.svelte';
 
   let easyMDE;
   onMount(() => {
@@ -79,6 +82,32 @@
       document.querySelector("#pic-slot").src = dataUrl;
     });
   };
+
+  let tags = [
+    {
+      name: 'default',
+      value: ''
+    },
+    {
+      name: 'modern(sans-serif)',
+      value: 'font-family: sans-serif;'
+    },
+    {
+      name: 'phone',
+      value: 'width: 26em;'
+    },
+    {
+      name: `your teacher's cLASsiC keynotes`,
+      value: `color: red; background-color: blue; font-size: 26px; font-family: 'Comic Sans MS';`,
+    }
+  ]
+  let cssSelected = [false, false, false, false];
+
+  function onClickTag(index) {
+    cssSelected[index] = !cssSelected[index];
+    cssString = tags.filter((tag, index) => cssSelected[index]=== true).map(tag => tag.value).join(' ');
+  }
+
 </script>
 
 <svelte:head>
@@ -96,12 +125,12 @@
   {/if}
   <div class="wrapper actions-wrapper">
     {#if isEditing}
-    <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toPic}">md2pic<span class="i-carbon-arrow-down" /></div>
-    <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toHack}">css<span class="i-carbon-area-custom" /></div>
+    <MonoButton on:click="{toPic}">md2pic<span class="i-carbon-arrow-down" /></MonoButton>
+    <MonoButton on:click="{toHack}">css<span class="i-carbon-area-custom" /></MonoButton>
     {:else}
-    <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toEdit}"><span class="i-carbon-arrow-up" />edit</div>
+    <MonoButton on:click="{toEdit}"><span class="i-carbon-arrow-up" />edit</MonoButton>
     {#if isHacking}
-    <div text-xl border-b-1 hover-cursor-pointer mono flex items-center on:click="{toPic}">md2pic<span class="i-carbon-arrow-down" /></div>
+    <MonoButton on:click="{toPic}">md2pic<span class="i-carbon-arrow-down" /></MonoButton>
     {/if}
     {/if}
   </div>
@@ -110,28 +139,36 @@
     {#if !hasPictured}
     {#if isHacking}
     <div>
-      <div w-full flex items-center justify-start gap-6 b-1 rounded-md p-3>
-        <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your css string. </span><span text-slate-400 ml-3>// color: #ff3e00; font-size: 100px; </span></div>
+      <CommandLineBox>
+        <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your CSS string or select some of the presets. </span></div>
+      </CommandLineBox>
+      <div w-full flex items-center justify-start gap-6 p-3 pl-0 mt-3>
+        {#each tags as tag, i}
+        <Tag on:click="{() => onClickTag(i)}" selected={cssSelected[i]}>{tag.name}</Tag>
+        {/each}
       </div>
       <textarea w-full bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
+      <div w-full flex items-center justify-start gap-6 p-3 mt-3>
+        <div text-xs less-mono text-slate-400>If you don't know what <a href="https://www.w3schools.com/css/">CSS</a> is, it's the <span underline decoration-gray-400>easiest</span> and the <span underline decoration-gray-400>best</span> <span underline decoration-gray-400>programming language</span> in the world, and none of the underlining words is true. </div>
+      </div>
     </div>
     {:else}
-    <div flex items-center justify-start gap-6 b-1 rounded-md p-3>
+    <CommandLineBox>
       <div text-base less-mono flex items-center><span mr-3 class="i-carbon-camera" /><span>picturing...</span></div>
-    </div>
+    </CommandLineBox>
     {/if}
     {:else}
-    <div flex items-center justify-start gap-6 b-1 rounded-md p-3>
+    <CommandLineBox>
       <div text-base less-mono flex items-center><span mr-3 class="i-carbon-machine-learning" /><span>done</span></div>
       <div text-base less-mono>Long press to save the image. </div>
-    </div>
+    </CommandLineBox>
     {/if}
   </div>
   <div class="wrapper result-wrapper" transition:fly="{{duration: 300}}">
     {#if !hasPictured}
     <div w-full max-w-full id="html-wrapper" style="{cssString}">{@html marked(value, {breaks: true})}</div>
     {:else}
-    <div w-full shadow-md rounded-md p-0 class="pic-wrapper"><img max-w-full id="pic-slot" /></div>
+    <div max-w-full shadow-md rounded-md p-0 class="pic-wrapper"><img w-full id="pic-slot" /></div>
     {/if}
   </div>
   {/if}
