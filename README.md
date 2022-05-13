@@ -16,3 +16,4 @@ A markdown text picturing app based on:
 
 <img width="871" alt="image" src="https://user-images.githubusercontent.com/42669906/168088814-8f56766d-1abe-42ae-b8ca-1a55ca936283.png">
 
+<img width="1000" alt="image" src="https://user-images.githubusercontent.com/42669906/168233146-38683bd5-08c7-4b7d-b657-0d4fe1569d0b.png">
