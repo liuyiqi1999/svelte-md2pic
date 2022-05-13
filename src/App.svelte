@@ -142,12 +142,12 @@
       <CommandLineBox>
         <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your CSS string or select some of the presets. </span></div>
       </CommandLineBox>
-      <div w-full flex items-center justify-start gap-6 p-3 pl-0 mt-3>
+      <div overflow-auto flex items-center gap-1 p-3 pl-0 mt-3>
         {#each tags as tag, i}
         <Tag on:click="{() => onClickTag(i)}" selected={cssSelected[i]}>{tag.name}</Tag>
         {/each}
       </div>
-      <textarea w-full bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
+      <textarea w-full box-border bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
       <div w-full flex items-center justify-start gap-6 p-3 mt-3>
         <div text-xs less-mono text-slate-400>If you don't know what <a href="https://www.w3schools.com/css/">CSS</a> is, it's the <span underline decoration-gray-400>easiest</span> and the <span underline decoration-gray-400>best</span> <span underline decoration-gray-400>programming language</span> in the world, and none of the underlining words is true. </div>
       </div>
