@@ -75,7 +75,13 @@
   }
 
   const takePicture = () => {
-    html2canvas(document.querySelector("#html-wrapper"), {scale: 2}).then(async (canvas) => {
+    const node = document.getElementById('html-wrapper');
+    node.style.display = 'none';
+    node.style.transform = 'scale(2)';
+    debugger;
+    html2canvas(node, {scale: 2, onclone: function (clonedDoc) {
+        clonedDoc.getElementById('html-wrapper').style.display = 'block';
+    }}).then(async (canvas) => {
       hasPictured = true;
       const dataUrl = canvas.toDataURL();
       await tick();
