@@ -175,7 +175,7 @@
 
 <main>
   {#if isEditing}
-  <div class="wrapper" transition:fly="{{duration: 300}}">
+  <div class="wrapper" transition:fly="{{duration: 100}}">
     <textarea class="textarea"></textarea>
   </div>
   {/if}
@@ -191,34 +191,34 @@
     {/if}
   </div>
   {#if !isEditing}
-  <div class="wrapper" transition:fly="{{duration: 300}}">
+  <div class="wrapper" transition:fly="{{duration: 200}}">
     {#if !hasPictured}
       {#if isHacking}
       <div>
         <CommandLineBox>
           <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your CSS string or select some of the presets. </span></div>
         </CommandLineBox>
-        <div overflow-auto flex items-center gap-1 mt-3>
+        <div overflow-auto flex items-center mt-3>
           <i mr-2 class="i-carbon-template" />
-          {#each tags as tag, i}
-          <Tag on:click="{() => onClickTag(i)}" selected={cssSelected[i]}>{tag.name}</Tag>
-          {/each}
+            {#each tags as tag, i}
+            <Tag on:click="{() => onClickTag(i)}" selected={cssSelected[i]}>{tag.name}</Tag>
+            {/each}
         </div>
-        <div overflow-auto flex items-center gap-1 mt-2>
+        <div overflow-auto flex items-center mt-2>
           <i mr-2 class="i-carbon-brush-polygon" />
-          {#each userDefinedCSSTags as tag (tag)}
-          <UserDefinedTag
-            tagName={tag}
-            selected={userDefiningCSSName === tag}
-            on:ready={onReadyUserDefinedCSS}
-            on:click={onClickUserDefinedCSS}
-            on:delete={onDeleteUserDefinedCSS}
-          />
-          {/each}
-          <Tag selected={false} on:click={onAddUserDefinedCSSTag}>
-            <i class="i-carbon-add" />
-            <span>New CSS set</span>
-          </Tag>
+            {#each userDefinedCSSTags as tag (tag)}
+            <UserDefinedTag
+              tagName={tag}
+              selected={userDefiningCSSName === tag}
+              on:ready={onReadyUserDefinedCSS}
+              on:click={onClickUserDefinedCSS}
+              on:delete={onDeleteUserDefinedCSS}
+            />
+            {/each}
+            <Tag selected={false} on:click={onAddUserDefinedCSSTag}>
+              <i class="i-carbon-add" />
+              <span>New CSS set</span>
+            </Tag>
         </div>
         <textarea w-full box-border bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
         <div w-full flex items-center justify-start gap-6 p-3 mt-3>
