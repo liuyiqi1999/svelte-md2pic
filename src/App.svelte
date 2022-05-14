@@ -51,7 +51,7 @@
     },
     {
       name: 'phone',
-      value: 'width: 33em;'
+      value: 'width: 40em; padding-top: 3em; padding-bottom: 3em;'
     },
     {
       name: `your teacher's cLaSsIc keynotes`,
@@ -198,7 +198,7 @@
         <CommandLineBox>
           <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your CSS string or select some of the presets. </span></div>
         </CommandLineBox>
-        <div overflow-auto flex items-center mt-3>
+        <div overflow-auto flex items-center gap-1 mt-3>
           <i mr-2 class="i-carbon-template" />
             {#each tags as tag, i}
             <Tag on:click="{() => onClickTag(i)}" selected={cssSelected[i]}>{tag.name}</Tag>
