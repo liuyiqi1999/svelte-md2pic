@@ -204,7 +204,7 @@
             <Tag on:click="{() => onClickTag(i)}" selected={cssSelected[i]}>{tag.name}</Tag>
             {/each}
         </div>
-        <div overflow-auto flex items-center mt-2>
+        <div overflow-auto flex items-center gap-1 mt-2>
           <i mr-2 class="i-carbon-brush-polygon" />
             {#each userDefinedCSSTags as tag (tag)}
             <UserDefinedTag
