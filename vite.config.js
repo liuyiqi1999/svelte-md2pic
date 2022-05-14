@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
-import Icons from 'unplugin-icons/vite'
 import Unocss from 'unocss/vite'
 import { presetAttributify, presetUno, presetIcons } from 'unocss'
 import { extractorSvelte } from '@unocss/core'
@@ -16,8 +15,7 @@ export default defineConfig({
         presetIcons({
           extraProperties: {
             'display': 'inline-block',
-            'vertical-align': 'middle',
-            'margin': '5px'
+            'vertical-align': 'middle'
           },
         }),
       ],
@@ -27,6 +25,5 @@ export default defineConfig({
       ]
     }),
     svelte(),
-    Icons({ compiler: 'svelte' })
   ]
 })

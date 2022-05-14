@@ -8,8 +8,11 @@
   import { marked } from 'marked';
   import html2canvas from 'html2canvas';
   import Tag from './lib/Tag.svelte';
+  import UserDefinedTag from "./lib/UserDefinedTag.svelte";
   import MonoButton from './lib/MonoButton.svelte';
   import CommandLineBox from './lib/CommandLineBox.svelte';
+  
+  const USER_DEFINE_CSS_PREFIX = 'css-user-';
 
   let easyMDE;
   onMount(() => {
@@ -37,11 +40,84 @@
   let value = '';
   let cssString = localStorage.getItem('css') ?? '';
 
+  let tags = [
+    {
+      name: 'default',
+      value: ''
+    },
+    {
+      name: 'modern(sans-serif)',
+      value: 'font-family: sans-serif;'
+    },
+    {
+      name: 'phone',
+      value: 'width: 33em;'
+    },
+    {
+      name: `your teacher's cLaSsIc keynotes`,
+      value: `color: red; background-color: blue; font-size: 26px; font-family: 'Comic Sans MS';`,
+    }
+  ]
+  let cssSelected = [false, false, false, false];
+
+  function onClickTag(index) {
+    cssSelected[index] = !cssSelected[index];
+    cssString = tags.filter((tag, index) => cssSelected[index]=== true).map(tag => tag.value).join(' ');
+  }
+
+  let userDefiningCSSName = '';
+  let userDefinedCSSTags = getLocalCSSUserArr();
+  console.log(userDefinedCSSTags);
+
+  function getLocalCSSUserArr () {
+    const cssUser = localStorage.getItem('css-user');
+    return cssUser ? JSON.parse(cssUser) : [];
+  }
+
+  async function onAddUserDefinedCSSTag () {
+    userDefinedCSSTags = [...userDefinedCSSTags, ''];
+    await tick();
+    const input = document.getElementById('tag-input');
+    input.focus();
+  }
+  
+  function onReadyUserDefinedCSS (event) {
+    console.log('READY ', event.detail);
+    userDefinedCSSTags = [...userDefinedCSSTags.filter(item => item !== event.detail.tagName), event.detail.inputValue];
+    const cssUserArr = getLocalCSSUserArr();
+    localStorage.setItem('css-user', JSON.stringify([...cssUserArr, event.detail.inputValue]))
+  }
+
+  function onClickUserDefinedCSS (event) {
+    console.log('CLICK ', event.detail);
+    if(event.detail !== userDefiningCSSName) { // select
+      cssSelected = [false, false, false, false];
+      userDefiningCSSName = event.detail;
+    } else { // unSelect
+      userDefiningCSSName = '';
+    }
+  }
+
+  function onDeleteUserDefinedCSS (event) {
+    console.log('DELETE ', event.detail);
+    userDefinedCSSTags = userDefinedCSSTags.filter(tag => tag !== event.detail);
+    localStorage.removeItem(`${USER_DEFINE_CSS_PREFIX}${event.detail}`);
+    const cssUserArr = getLocalCSSUserArr();
+    localStorage.setItem('css-user', cssUserArr.filter(item => item != event.detail))
+  }
+
+  function storeCSSSettings () {
+    localStorage.setItem('css', cssString);
+    if (userDefiningCSSName) {
+      localStorage.setItem(`${USER_DEFINE_CSS_PREFIX}${userDefiningCSSName}`, cssString);
+    }
+  }
+
   async function toPic() {
     if (isEditing) {
       value = easyMDE.value();
     } else if (isHacking) {
-      localStorage.setItem('css', cssString);
+      storeCSSSettings();
     }
     isEditing = false;
     isHacking = false;
@@ -84,34 +160,9 @@
       hasPictured = true;
       const dataUrl = canvas.toDataURL();
       await tick();
-      document.querySelector("#pic-slot").src = dataUrl;
+      document.querySelector("#pic-slot").setAttribute('src', dataUrl);
     });
   };
-
-  let tags = [
-    {
-      name: 'default',
-      value: ''
-    },
-    {
-      name: 'modern(sans-serif)',
-      value: 'font-family: sans-serif;'
-    },
-    {
-      name: 'phone',
-      value: 'width: 33em;'
-    },
-    {
-      name: `your teacher's cLASsiC keynotes`,
-      value: `color: red; background-color: blue; font-size: 26px; font-family: 'Comic Sans MS';`,
-    }
-  ]
-  let cssSelected = [false, false, false, false];
-
-  function onClickTag(index) {
-    cssSelected[index] = !cssSelected[index];
-    cssString = tags.filter((tag, index) => cssSelected[index]=== true).map(tag => tag.value).join(' ');
-  }
 
 </script>
 
@@ -130,38 +181,55 @@
   {/if}
   <div class="wrapper actions-wrapper">
     {#if isEditing}
-    <MonoButton on:click="{toPic}">md2pic<span class="i-carbon-arrow-down" /></MonoButton>
-    <MonoButton on:click="{toHack}">css<span class="i-carbon-area-custom" /></MonoButton>
+    <MonoButton on:click="{toPic}">md2pic<span ml-1 class="i-carbon-arrow-down" /></MonoButton>
+    <MonoButton on:click="{toHack}">css<span ml-1 class="i-carbon-area-custom" /></MonoButton>
     {:else}
-    <MonoButton on:click="{toEdit}"><span class="i-carbon-arrow-up" />edit</MonoButton>
-    {#if isHacking}
-    <MonoButton on:click="{toPic}">md2pic<span class="i-carbon-arrow-down" /></MonoButton>
-    {/if}
+    <MonoButton on:click="{toEdit}"><span mr-1 class="i-carbon-arrow-up" />edit</MonoButton>
+      {#if isHacking}
+      <MonoButton on:click="{toPic}">md2pic<span ml-1 class="i-carbon-arrow-down" /></MonoButton>
+      {/if}
     {/if}
   </div>
   {#if !isEditing}
   <div class="wrapper" transition:fly="{{duration: 300}}">
     {#if !hasPictured}
-    {#if isHacking}
-    <div>
+      {#if isHacking}
+      <div>
+        <CommandLineBox>
+          <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your CSS string or select some of the presets. </span></div>
+        </CommandLineBox>
+        <div overflow-auto flex items-center gap-1 mt-3>
+          <i mr-2 class="i-carbon-template" />
+          {#each tags as tag, i}
+          <Tag on:click="{() => onClickTag(i)}" selected={cssSelected[i]}>{tag.name}</Tag>
+          {/each}
+        </div>
+        <div overflow-auto flex items-center gap-1 mt-2>
+          <i mr-2 class="i-carbon-brush-polygon" />
+          {#each userDefinedCSSTags as tag (tag)}
+          <UserDefinedTag
+            tagName={tag}
+            selected={userDefiningCSSName === tag}
+            on:ready={onReadyUserDefinedCSS}
+            on:click={onClickUserDefinedCSS}
+            on:delete={onDeleteUserDefinedCSS}
+          />
+          {/each}
+          <Tag selected={false} on:click={onAddUserDefinedCSSTag}>
+            <i class="i-carbon-add" />
+            <span>New CSS set</span>
+          </Tag>
+        </div>
+        <textarea w-full box-border bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
+        <div w-full flex items-center justify-start gap-6 p-3 mt-3>
+          <div text-xs less-mono text-slate-400>If you don't know what <a href="https://www.w3schools.com/css/">CSS</a> is, it's the <span underline decoration-gray-400>easiest</span> and the <span underline decoration-gray-400>best</span> <span underline decoration-gray-400>programming language</span> in the world, and none of the underlining words is true. </div>
+        </div>
+      </div>
+      {:else}
       <CommandLineBox>
-        <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your CSS string or select some of the presets. </span></div>
+        <div text-base less-mono flex items-center><span mr-3 class="i-carbon-camera" /><span>picturing...</span></div>
       </CommandLineBox>
-      <div overflow-auto flex items-center gap-1 p-3 pl-0 mt-3>
-        {#each tags as tag, i}
-        <Tag on:click="{() => onClickTag(i)}" selected={cssSelected[i]}>{tag.name}</Tag>
-        {/each}
-      </div>
-      <textarea w-full box-border bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
-      <div w-full flex items-center justify-start gap-6 p-3 mt-3>
-        <div text-xs less-mono text-slate-400>If you don't know what <a href="https://www.w3schools.com/css/">CSS</a> is, it's the <span underline decoration-gray-400>easiest</span> and the <span underline decoration-gray-400>best</span> <span underline decoration-gray-400>programming language</span> in the world, and none of the underlining words is true. </div>
-      </div>
-    </div>
-    {:else}
-    <CommandLineBox>
-      <div text-base less-mono flex items-center><span mr-3 class="i-carbon-camera" /><span>picturing...</span></div>
-    </CommandLineBox>
-    {/if}
+      {/if}
     {:else}
     <CommandLineBox>
       <div text-base less-mono flex items-center><span mr-3 class="i-carbon-machine-learning" /><span>done</span></div>
@@ -171,9 +239,9 @@
   </div>
   <div class="wrapper result-wrapper" transition:fly="{{duration: 300}}">
     {#if !hasPictured}
-    <div w-full max-w-full id="html-wrapper" style="{cssString}">{@html marked(value, {breaks: true})}</div>
+    <div max-w-full id="html-wrapper" shadow-md rounded-md p-0 style="{cssString}">{@html marked(value, {breaks: true})}</div>
     {:else}
-    <div max-w-full shadow-md rounded-md p-0 class="pic-wrapper"><img w-full id="pic-slot" /></div>
+    <div max-w-full shadow-md rounded-md p-0><img w-full alt="result-text" id="pic-slot" /></div>
     {/if}
   </div>
   {/if}
@@ -206,28 +274,12 @@
     margin: 0 auto;
   }
 
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4rem;
-    font-weight: 100;
-    line-height: 1.1;
-    margin: 2rem auto;
-    max-width: 14rem;
-  }
-
   a {
     color: var(--theme-colors-primary)
   }
 
   a:hover {
     color: var(--theme-colors-accent)
-  }
-
-  p {
-    max-width: 14rem;
-    margin: 1rem auto;
-    line-height: 1.35;
   }
 
   footer {
@@ -262,14 +314,4 @@
 			padding: 40px 0;
 		}
 	}
-
-  @media (min-width: 480px) {
-    h1 {
-      max-width: none;
-    }
-
-    p {
-      max-width: none;
-    }
-  }
 </style>

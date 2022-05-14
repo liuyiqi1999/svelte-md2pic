@@ -4,7 +4,7 @@
 
 <div
     class:active="{selected}"
-    less-mono text-slate-400 text-xs whitespace-nowrap rounded-lg b-1 p-1 px-2 hover:text-slate-600 hover:cursor-pointer
+    less-mono text-slate-400 text-sm whitespace-nowrap rounded-36 b-1 p-1 px-2 hover:text-slate-600 hover:cursor-pointer
     on:click
 >
     <slot />
