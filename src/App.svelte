@@ -161,7 +161,7 @@
 </script>
 
 <svelte:head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+  <link rel="stylesheet" type="text/css" href="./src/assets/easymde.min.css">
 </svelte:head>
 
 <main h-full>
