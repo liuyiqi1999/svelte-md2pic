@@ -164,15 +164,15 @@
   <link rel="stylesheet" type="text/css" href="./src/assets/easymde.min.css">
 </svelte:head>
 
-<main h-full>
-  <Header />
+<Header />
+<main max-w-4xl mx-auto>
   <div px-4>
     {#if isEditing}
-    <div max-w-4xl my-8 transition:fly="{{duration: 100}}">
+    <div my-8 transition:fly="{{duration: 100}}">
       <textarea class="textarea"></textarea>
     </div>
     {/if}
-    <div max-w-4xl my-8 flex justify-center items-center gap-8>
+    <div my-8 flex justify-center items-center gap-8>
       {#if isEditing}
       <MonoButton on:click="{toPic}">md2pic<i i-carbon-arrow-down ml-1/></MonoButton>
       <MonoButton on:click="{toHack}">css<i i-carbon-area-custom ml-1/></MonoButton>
@@ -241,8 +241,8 @@
     </div>
     {/if}
   </div>
-  <footer text-sm c-gray-400 w-full text-center>Powered by <a href="https://svelte.dev">Svelte</a></footer>
 </main>
+<footer text-sm c-gray-400 w-full text-center>Powered by <a href="https://svelte.dev">Svelte</a></footer>
 
 
 <style lang="scss">
