@@ -232,9 +232,11 @@
     </div>
     <div max-w-4xl my-8 class="result-wrapper" transition:fly="{{duration: 300}}">
       {#if !hasPictured}
-      <div max-w-full shadow-md rounded-md id="html-wrapper" style="{cssString}">{@html marked(value, {breaks: true})}</div>
+      <div max-w-full shadow-md rounded-md bg-light dark:bg-dark p-0>
+        <div max-w-full c-dark bg-light dark:c-light dark:bg-dark id="html-wrapper" style="{cssString}">{@html marked(value, {breaks: true})}</div>
+      </div>
       {:else}
-      <div max-w-full shadow-md rounded-md p-0><img w-full alt="result-text" id="pic-slot" /></div>
+      <img shadow-md rounded-md bg-light dark:bg-dark p-0 w-full alt="result-text" id="pic-slot" />
       {/if}
     </div>
     {/if}
