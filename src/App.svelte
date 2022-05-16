@@ -160,10 +160,6 @@
 
 </script>
 
-<svelte:head>
-  <link rel="stylesheet" type="text/css" href="./public/easymde.min.css">
-</svelte:head>
-
 <Header />
 <main max-w-4xl mx-auto>
   <div px-4>
@@ -248,6 +244,7 @@
 <style lang="scss">
   @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap");
   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+  @import "easymde/dist/easymde.min";
 
   :global(html, body) {
     margin: 0;
