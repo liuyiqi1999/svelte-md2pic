@@ -215,7 +215,7 @@
           </div>
           <textarea w-full box-border c-dark dark:c-light bg-light dark:bg-dark bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
           <div w-full flex items-center justify-start gap-6 p-3 mt-3>
-            <div text-xs less-mono text-slate-400>If you don't know what <a no-underline text-slate-400 href="https://www.w3schools.com/css/">CSS</a> is, it's the <span underline decoration-gray-400>easiest</span> and the <span underline decoration-gray-400>best</span> <span underline decoration-gray-400>programming language</span> in the world, and none of the underlining words is true. </div>
+            <div max-w-full text-xs less-mono text-slate-400>If you don't know what <a no-underline text-slate-400 href="https://www.w3schools.com/css/">CSS</a> is, it's the <span underline decoration-gray-400>easiest</span> and the <span underline decoration-gray-400>best</span> <span underline decoration-gray-400>programming language</span> in the world, and none of the underlining words is true. </div>
           </div>
         </div>
         {:else}
