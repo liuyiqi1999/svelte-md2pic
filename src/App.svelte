@@ -1,7 +1,5 @@
 <script>
   import Header from "./lib/header/Header.svelte";
-  import { ThemeWrapper } from 'svelte-themer';
-  import { themes } from "./themes";
   import { onMount, tick } from 'svelte';
   import EasyMDE from 'easymde';
   import { fly } from 'svelte/transition';
@@ -67,7 +65,6 @@
 
   let userDefiningCSSName = '';
   let userDefinedCSSTags = getLocalCSSUserArr();
-  console.log(userDefinedCSSTags);
 
   function getLocalCSSUserArr () {
     const cssUser = localStorage.getItem('css-user');
@@ -82,14 +79,12 @@
   }
   
   function onReadyUserDefinedCSS (event) {
-    console.log('READY ', event.detail);
     userDefinedCSSTags = [...userDefinedCSSTags.filter(item => item !== event.detail.tagName), event.detail.inputValue];
     const cssUserArr = getLocalCSSUserArr();
     localStorage.setItem('css-user', JSON.stringify([...cssUserArr, event.detail.inputValue]))
   }
 
   function onClickUserDefinedCSS (event) {
-    console.log('CLICK ', event.detail);
     if(event.detail !== userDefiningCSSName) { // select
       cssSelected = [false, false, false, false];
       userDefiningCSSName = event.detail;
@@ -99,7 +94,6 @@
   }
 
   function onDeleteUserDefinedCSS (event) {
-    console.log('DELETE ', event.detail);
     userDefinedCSSTags = userDefinedCSSTags.filter(tag => tag !== event.detail);
     localStorage.removeItem(`${USER_DEFINE_CSS_PREFIX}${event.detail}`);
     const cssUserArr = getLocalCSSUserArr();
@@ -170,135 +164,133 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
 </svelte:head>
 
-<ThemeWrapper themes="{themes}">
-<Header />
-
-<main>
-  {#if isEditing}
-  <div class="wrapper" transition:fly="{{duration: 100}}">
-    <textarea class="textarea"></textarea>
-  </div>
-  {/if}
-  <div class="wrapper actions-wrapper">
+<main h-full>
+  <Header />
+  <div px-4>
     {#if isEditing}
-    <MonoButton on:click="{toPic}">md2pic<span ml-1 class="i-carbon-arrow-down" /></MonoButton>
-    <MonoButton on:click="{toHack}">css<span ml-1 class="i-carbon-area-custom" /></MonoButton>
-    {:else}
-    <MonoButton on:click="{toEdit}"><span mr-1 class="i-carbon-arrow-up" />edit</MonoButton>
-      {#if isHacking}
-      <MonoButton on:click="{toPic}">md2pic<span ml-1 class="i-carbon-arrow-down" /></MonoButton>
-      {/if}
+    <div max-w-4xl my-8 transition:fly="{{duration: 100}}">
+      <textarea class="textarea"></textarea>
+    </div>
     {/if}
-  </div>
-  {#if !isEditing}
-  <div class="wrapper" transition:fly="{{duration: 200}}">
-    {#if !hasPictured}
-      {#if isHacking}
-      <div>
+    <div max-w-4xl my-8 flex justify-center items-center gap-8>
+      {#if isEditing}
+      <MonoButton on:click="{toPic}">md2pic<i i-carbon-arrow-down ml-1/></MonoButton>
+      <MonoButton on:click="{toHack}">css<i i-carbon-area-custom ml-1/></MonoButton>
+      {:else}
+      <MonoButton on:click="{toEdit}"><i i-carbon-arrow-up mr-1 />edit</MonoButton>
+        {#if isHacking}
+        <MonoButton on:click="{toPic}">md2pic<i i-carbon-arrow-down ml-1 /></MonoButton>
+        {/if}
+      {/if}
+    </div>
+    {#if !isEditing}
+    <div max-w-4xl my-8 transition:fly="{{duration: 200}}">
+      {#if !hasPictured}
+        {#if isHacking}
+        <div>
+          <CommandLineBox>
+            <div text-base less-mono flex items-center><i i-carbon-keyboard mr-3 /><span>Enter your CSS string or select some of the presets. </span></div>
+          </CommandLineBox>
+          <div overflow-auto flex items-center gap-1 mt-3>
+            <i i-carbon-template mr-2/>
+              {#each tags as tag, i}
+              <Tag on:click="{() => onClickTag(i)}" selected={cssSelected[i]}>{tag.name}</Tag>
+              {/each}
+          </div>
+          <div overflow-auto flex items-center gap-1 mt-2>
+            <i i-carbon-brush-polygon mr-2 />
+              {#each userDefinedCSSTags as tag (tag)}
+              <UserDefinedTag
+                tagName={tag}
+                selected={userDefiningCSSName === tag}
+                on:ready={onReadyUserDefinedCSS}
+                on:click={onClickUserDefinedCSS}
+                on:delete={onDeleteUserDefinedCSS}
+              />
+              {/each}
+              <Tag selected={false} on:click={onAddUserDefinedCSSTag}>
+                <i class="i-carbon-add" />
+                <span>New CSS set</span>
+              </Tag>
+          </div>
+          <textarea w-full box-border c-dark dark:c-light bg-light dark:bg-dark bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
+          <div w-full flex items-center justify-start gap-6 p-3 mt-3>
+            <div text-xs less-mono text-slate-400>If you don't know what <a no-underline text-slate-400 href="https://www.w3schools.com/css/">CSS</a> is, it's the <span underline decoration-gray-400>easiest</span> and the <span underline decoration-gray-400>best</span> <span underline decoration-gray-400>programming language</span> in the world, and none of the underlining words is true. </div>
+          </div>
+        </div>
+        {:else}
         <CommandLineBox>
-          <div text-base less-mono flex items-center><span mr-3 class="i-carbon-keyboard" /><span>Enter your CSS string or select some of the presets. </span></div>
+          <div text-base less-mono flex items-center><i i-carbon-camera mr-3  /><span>picturing...</span></div>
         </CommandLineBox>
-        <div overflow-auto flex items-center gap-1 mt-3>
-          <i mr-2 class="i-carbon-template" />
-            {#each tags as tag, i}
-            <Tag on:click="{() => onClickTag(i)}" selected={cssSelected[i]}>{tag.name}</Tag>
-            {/each}
-        </div>
-        <div overflow-auto flex items-center gap-1 mt-2>
-          <i mr-2 class="i-carbon-brush-polygon" />
-            {#each userDefinedCSSTags as tag (tag)}
-            <UserDefinedTag
-              tagName={tag}
-              selected={userDefiningCSSName === tag}
-              on:ready={onReadyUserDefinedCSS}
-              on:click={onClickUserDefinedCSS}
-              on:delete={onDeleteUserDefinedCSS}
-            />
-            {/each}
-            <Tag selected={false} on:click={onAddUserDefinedCSSTag}>
-              <i class="i-carbon-add" />
-              <span>New CSS set</span>
-            </Tag>
-        </div>
-        <textarea w-full box-border bind:value="{cssString}" rounded-md p-3 mt-3></textarea>
-        <div w-full flex items-center justify-start gap-6 p-3 mt-3>
-          <div text-xs less-mono text-slate-400>If you don't know what <a href="https://www.w3schools.com/css/">CSS</a> is, it's the <span underline decoration-gray-400>easiest</span> and the <span underline decoration-gray-400>best</span> <span underline decoration-gray-400>programming language</span> in the world, and none of the underlining words is true. </div>
-        </div>
-      </div>
+        {/if}
       {:else}
       <CommandLineBox>
-        <div text-base less-mono flex items-center><span mr-3 class="i-carbon-camera" /><span>picturing...</span></div>
+        <div text-base less-mono flex items-center><i i-carbon-machine-learning mr-3 /><span>done</span></div>
+        <div text-base less-mono>Long press to save the image. </div>
       </CommandLineBox>
       {/if}
-    {:else}
-    <CommandLineBox>
-      <div text-base less-mono flex items-center><span mr-3 class="i-carbon-machine-learning" /><span>done</span></div>
-      <div text-base less-mono>Long press to save the image. </div>
-    </CommandLineBox>
+    </div>
+    <div max-w-4xl my-8 class="result-wrapper" transition:fly="{{duration: 300}}">
+      {#if !hasPictured}
+      <div max-w-full shadow-md rounded-md id="html-wrapper" style="{cssString}">{@html marked(value, {breaks: true})}</div>
+      {:else}
+      <div max-w-full shadow-md rounded-md p-0><img w-full alt="result-text" id="pic-slot" /></div>
+      {/if}
+    </div>
     {/if}
   </div>
-  <div class="wrapper result-wrapper" transition:fly="{{duration: 300}}">
-    {#if !hasPictured}
-    <div max-w-full id="html-wrapper" shadow-md rounded-md p-0 style="{cssString}">{@html marked(value, {breaks: true})}</div>
-    {:else}
-    <div max-w-full shadow-md rounded-md p-0><img w-full alt="result-text" id="pic-slot" /></div>
-    {/if}
-  </div>
-  {/if}
+  <footer text-sm c-gray-400 w-full text-center>Powered by <a href="https://svelte.dev">Svelte</a></footer>
 </main>
 
-<footer>Powered by <a href="https://svelte.dev">Svelte</a></footer>
-</ThemeWrapper>
 
 <style lang="scss">
   @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap");
   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 
+  :global(html, body) {
+    margin: 0;
+    padding: 0;
+  }
+
   :global(html) {
-    background-color: var(--theme-colors-background, initial);
-    color: var(--theme-colors-text, initial);
+    color: rgb(34, 34, 34);
+    background-color: rgb(246, 246, 246);
   }
 
-  :global(body) {
-    margin-top: 0;
-    overflow: scroll;
+  :global(html.dark) {
+    color: rgb(246, 246, 246);
+    background-color: rgb(34, 34, 34);
   }
 
-  :root {
+  :global(#app) {
     font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
       Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
-  main {
-    padding: 1em;
-    margin: 0 auto;
+  :global(.dark .EasyMDEContainer .editor-toolbar) {
+    background-color: rgb(44, 44, 44);
   }
 
-  a {
-    color: var(--theme-colors-primary)
+  :global(.dark .CodeMirror, .editor-preview) {
+      color: #fff;
+      border-color: rgb(75, 85, 99);
+      background-color: rgb(44, 44, 44);
   }
 
-  a:hover {
-    color: var(--theme-colors-accent)
+  :global(.dark .cm-s-easymde .CodeMirror-cursor) {
+      border-color: #fff !important;
   }
 
-  footer {
-    font-size: 0.9em;
-    color: var(--theme-colors-secondary);
-    width: 100%;
-		text-align: center;
-	}
-
-  .wrapper {
-    max-width: 50em;
-    margin: 2em auto;
+  :global(.dark .editor-toolbar button i) {
+      color: #fff;
   }
 
-  .actions-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2em
+  :global(.dark .editor-toolbar button i:hover) {
+      color: #ff3e00;
+  }
+
+  :global(.dark .editor-preview pre) {
+      background-color: #333;
   }
 
   #html-wrapper {
@@ -307,6 +299,10 @@
     font-weight: normal;
     font-family: "Noto Serif SC", serif;
     text-align: left;
+  }
+
+  a {
+    color: #ff3e00;
   }
 
 	@media (min-width: 480px) {

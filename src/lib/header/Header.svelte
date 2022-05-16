@@ -1,100 +1,49 @@
 <script>
 	let title = 'md2pic';
 	let link = 'https://github.com/liuyiqi1999/svelte-md2pic';
-	import ThemeToggler from '../ThemeToggler.svelte';
 	import logo from './svelte-logo.svg';
+
+	let theme = 'light';
+
+	function changeTheme(next) {
+		const now = next === 'dark' ? 'light' : 'dark';
+		if(document.documentElement.classList.contains(now)) {
+			document.documentElement.classList.replace(now, next);
+		} else {
+			document.documentElement.classList.add(next);
+		}
+		theme = next;
+	}
+
+	if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		changeTheme('dark');
+	}
+	else {
+		changeTheme('light');
+	}
 </script>
 
-<header max-w-full>
-	<div class="head-wrapper">
-		<div class="icon-wrapper">
-			<div class="icon">
-				<a href="https://kit.svelte.dev">
-					<img src={logo} alt="SvelteKit" />
+<header max-w-full flex justify-between items-center border-b-1 b-accent px-2>
+	<div flex justify-center items-center>
+		<div flex justify-center items-center>
+			<div w-12 h-12>
+				<a href="https://kit.svelte.dev" flex justify-center items-center w-full h-full>
+					<img w-8 h-8 object-contain src={logo} alt="SvelteKit" />
 				</a>
 			</div>
 		</div>
-		<a class="title" href="/">{title}</a>
+		<a mono text-base font-bold no-underline c-gray-600 dark:c-gray-300 border-l-1 b-accent pl-3 class="title" href="/">{title}</a>
 	</div>
-	<div class="corner">
-		<a class="link-icon" href="{link}"><i class="i-carbon-logo-github link-icon" /></a>
-		<!-- <span class="link-icon"><ThemeToggler /></span> -->
+	<div flex justify-center items-center gap-2 align-mid>
+		<a no-underline href="{link}"><i i-carbon-logo-github text-2xl c-gray-600 dark:c-gray-300 hover:c-accent/></a>
+		{#if theme === 'light'}
+		<div i-carbon-sun text-2xl c-gray-600 dark:c-gray-300 hover:c-accent  on:click="{() => changeTheme('dark')}" />
+		{:else if theme === 'dark'}
+		<div i-carbon-moon text-2xl c-gray-600 dark:c-gray-300 hover:c-accent  on:click="{() => changeTheme('light')}" />
+		{/if}
 	</div>
 </header>
 
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
-
-	header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		border-color: rgba(255, 62, 0, 0.1);
-		border-bottom-style: solid;
-		border-bottom-width: 1px;
-		padding: 0 0.5em;
-	}
-
-	.head-wrapper {
-		height: 3em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.icon-wrapper {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.icon {
-		width: 3em;
-		height: 3em;
-	}
-
-	.icon * {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-	}
-
-	.icon img {
-		width: 2em;
-		height: 2em;
-		object-fit: contain;
-	}
-	
-	.head-wrapper .title {
-		font-family: 'Major Mono Display', monospace;
-		line-height: 1em;
-		font-size: 1em;
-		font-weight: bold;
-		color: var(--theme-colors-text);
-		border-left: 1px solid var(--theme-colors-accent);
-		padding-left: 0.7em;
-		text-decoration: none;
-	}
-
-	.corner {
-		height: 3em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.corner .link-icon {
-		font-size: 1.3em;
-		color: var(--heading-color);
-		margin-left: 0.5em;
-	}
-	.corner .link-icon:hover {
-		color: var(--theme-colors-accent);
-	}
-
-	a:hover {
-		color: var(--theme-colors-accent);
-	}
 </style>

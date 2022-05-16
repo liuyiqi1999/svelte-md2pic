@@ -23,7 +23,12 @@ export default defineConfig({
       rules: [
         ['mono', {'font-family': `'Major Mono Display', monospace;`}],
         ['less-mono', {'font-family': `'Space Mono', monospace;`}],
-      ]
+      ],
+      theme: {
+        colors: {
+          'accent': '#ff3e00'
+        }
+      }
     }),
     svelte(),
   ]

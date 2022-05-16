@@ -14,11 +14,11 @@
     .active {
         font-weight: bold;
         border-width: 2px;
-        color: var(--theme-colors-accent);
-        border-color: var(--theme-colors-accent);
+        color: #ff3e00;;
+        border-color: #ff3e00;;
     }
     .active:hover {
-        color: var(--theme-colors-accent);
-        border-color: var(--theme-colors-accent);
+        color: #ff3e00;;
+        border-color: #ff3e00;;
     }
 </style>
